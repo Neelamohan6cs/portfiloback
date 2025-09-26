@@ -18,6 +18,11 @@ const app = express();
 // Middleware
 app.use(cors());
 
+app.use(cors({
+  origin: "https://neelamohan-profile.vercel.app", // your frontend URL
+  credentials: true
+}));
+
 // Parse JSON for API requests (non-file uploads)
 app.use(express.json());
 
