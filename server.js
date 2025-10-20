@@ -30,6 +30,8 @@ app.use((err, req, res, next) => {
   res.status(400).json({ error: "Invalid request body" });
 });
 
+const aboutRoute = require("./routes/aboutRoute");
+app.use("/api/abouts", aboutRoute);
 const profileRoute = require("./routes/profileRoute");
 app.use("/api/profiles", profileRoute);
 
