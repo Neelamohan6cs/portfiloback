@@ -32,6 +32,7 @@ app.use((err, req, res, next) => {
 
 const aboutRoute = require("./routes/aboutRoute");
 app.use("/api/abouts", aboutRoute);
+
 const profileRoute = require("./routes/profileRoute");
 app.use("/api/profiles", profileRoute);
 
