@@ -1,33 +1,44 @@
+// server.js
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const dotenv = require("dotenv");
 
+// Load environment variables from .env
 dotenv.config();
+
+// Import MongoDB connection
 const connectDB = require("./connections/mangoconect");
+
+// Connect to MongoDB
 connectDB();
 
 const app = express();
 
-// ✅ CORS for Vercel frontend
-app.use(cors({
-  origin: "https://neelamohan-profile.vercel.app",
-  credentials: true
-}));
+// Middleware
+app.use(cors());
 
+// Parse JSON for API requests (non-file uploads)
 app.use(express.json());
+
+// Serve uploads folder statically
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-const profileRoute = require("./routes/profileRoute");
-app.use("/api/profiles", profileRoute);
-
-app.get("/", (req, res) => res.send("✅ Server is running"));
-
-// ✅ Error handler AFTER routes
+// Routes
 app.use((err, req, res, next) => {
   console.error("🔥 Express error:", err.message);
   res.status(400).json({ error: "Invalid request body" });
 });
 
+const aboutRoute = require("./routes/aboutRoute");
+app.use("/api/abouts", aboutRoute);
+
+const profileRoute = require("./routes/profileRoute");
+app.use("/api/profiles", profileRoute);
+
+// Health check route
+app.get("/", (req, res) => res.send("✅ Server is running"));
+
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
