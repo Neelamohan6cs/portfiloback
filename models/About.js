@@ -6,9 +6,9 @@ const aboutSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    name: { 
+    name: {
       type: String,
-      required: true 
+      required: true
     },
     extraFields: [
       {
@@ -17,7 +17,7 @@ const aboutSchema = new mongoose.Schema(
       }
     ]
   },
-  { timestamps: true } // ✅ correct place
+  { timestamps: true }
 );
 
 module.exports = mongoose.model('About', aboutSchema);
