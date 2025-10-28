@@ -36,6 +36,14 @@ app.use("/api/abouts", aboutRoute);
 const profileRoute = require("./routes/profileRoute");
 app.use("/api/profiles", profileRoute);
 
+const eduRoute = require("./routes/eduRoute");
+app.use("/api/educations", eduRoute);
+
+const cerRoute=require("./routes/certificationRoute");
+app.use("/api/certifications",cerRoute);
+
+const contactRoute=require("./routes/contact");
+app.use("/api/contact",contactRoute);
 // Health check route
 app.get("/", (req, res) => res.send("✅ Server is running"));
 

@@ -20,11 +20,29 @@ const upload = multer({ storage });
 
 /**
  * @route   POST /api/profiles
- * @desc    Create a new profile
+ * @desc    Create a new profile (replaces old one)
  */
 router.post("/", upload.single("profileImg"), async (req, res) => {
   try {
-    // Parse roles (stringified array from frontend)
+    // ✅ Step 1: Find and delete previous profile
+    const oldProfile = await Profile.findOne().sort({ createdAt: -1 });
+
+    if (oldProfile) {
+      // Delete old image file (if exists)
+      if (oldProfile.profileImg) {
+        const oldImagePath = path.join(__dirname, "..", oldProfile.profileImg);
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+          console.log("🗑️ Deleted old image:", oldImagePath);
+        }
+      }
+
+      // Delete old document
+      await Profile.deleteOne({ _id: oldProfile._id });
+      console.log("🗑️ Deleted old profile record");
+    }
+
+    // ✅ Step 2: Parse fields from frontend
     let roles = [];
     if (req.body.roles) {
       try {
@@ -36,7 +54,6 @@ router.post("/", upload.single("profileImg"), async (req, res) => {
       }
     }
 
-    // Parse socials (stringified object from frontend)
     let socials = {};
     if (req.body.socialLinks) {
       try {
@@ -51,6 +68,7 @@ router.post("/", upload.single("profileImg"), async (req, res) => {
       }
     }
 
+    // ✅ Step 3: Create new profile
     const profile = new Profile({
       name: req.body.name || "Neelamohan",
       profileImg: req.file ? `/uploads/${req.file.filename}` : "",
@@ -61,7 +79,9 @@ router.post("/", upload.single("profileImg"), async (req, res) => {
 
     await profile.save();
 
+    // ✅ Step 4: Send response
     res.status(201).json({
+      message: "✅ Profile saved successfully (old data removed)",
       name: profile.name,
       image: profile.profileImg,
       roles: profile.roles,

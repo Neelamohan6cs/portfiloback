@@ -2,15 +2,16 @@ const express = require('express');
 const router = express.Router();
 const About = require("../models/About");
 
-// ---------------- CREATE or UPDATE About ----------------
+
 router.post("/", async (req, res) => {
   try {
-    // If one About exists, update it; else create new
+    
     const about = await About.findOneAndUpdate(
-      {}, // match first or only document
+      {}, 
       req.body,
-      { new: true, upsert: true, runValidators: true } // create if not exists
+      { new: true, upsert: true, runValidators: true } 
     );
+    console.log("Created/Updated About:", about);
 
     res.status(201).json(about);
   } catch (error) {
@@ -33,7 +34,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ---------------- UPDATE About by ID ----------------
+
 router.put("/:id", async (req, res) => {
   try {
     if (!req.params.id) {
@@ -57,7 +58,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// ---------------- DELETE All About ----------------
+
 router.delete("/", async (req, res) => {
   try {
     await About.deleteMany({});
