@@ -2,6 +2,11 @@ const express = require("express");
 const nodemailer = require("nodemailer");
 const router = express.Router();
 
+router.get("/test", (req, res) => {
+  res.json({ status: "contact route works!" });
+});
+
+
 router.post("/", async (req, res) => {
   const { name, email, subject, message } = req.body;
 
@@ -103,3 +108,4 @@ router.post("/", async (req, res) => {
 });
 
 module.exports = router;
+
