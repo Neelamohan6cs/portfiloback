@@ -4,7 +4,7 @@ const router = express.Router();
 
 // ✅ Test route (for quick Render check)
 router.get("/test", (req, res) => {
-  res.json({ status: "contact route works!" });
+  res.json({ status: "contact route works! this time" });
 });
 
 // ✅ POST: Send email using Brevo API
@@ -66,3 +66,4 @@ router.post("/", async (req, res) => {
 });
 
 module.exports = router;
+
